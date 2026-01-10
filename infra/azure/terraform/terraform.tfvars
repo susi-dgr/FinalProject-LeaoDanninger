@@ -5,3 +5,6 @@ eventhub_name           = "orders"
 consumer_group_name     = "oms-consumer"
 partition_count         = 2
 message_retention       = 7
+storage_account_name      = "omsarchive12345" # must be globally unique + lowercase
+storage_container_name    = "eventhub-archive"
+capture_enabled           = true
