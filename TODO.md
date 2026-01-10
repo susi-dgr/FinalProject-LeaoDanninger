@@ -19,13 +19,13 @@ Note: This might change in the process
   - [x] Create Consumer Group `oms-consumer`
   - [x] Output required values (names + connection string) for use by on-prem services
 
-- [ ] Azure CLI bootstrap (repeatable setup for Terraform auth)
-  - [ ] `az login` and set subscription
+- [x] Azure CLI bootstrap (repeatable setup for Terraform auth)
+  - [x] `az login` and set subscription
   - [ ] Create Service Principal for Terraform (RBAC)
   - [ ] Export `ARM_CLIENT_ID`, `ARM_CLIENT_SECRET`, `ARM_TENANT_ID`, `ARM_SUBSCRIPTION_ID`
   - [ ] Provide `scripts/bootstrap_azure.sh` (or `.ps1` on Windows) + short README usage
 
-- [ ] OMS backend integration (matches diagram flow: on-prem → Azure Event Hub → on-prem processing → MySQL)
+- [ ] OMS backend integration (on-prem → Azure Event Hub → on-prem processing → MySQL)
   - [ ] Update NodeJS order-processing service to **consume** from Azure Event Hub (`orders`, `oms-consumer`)
   - [ ] Validate incoming event JSON schema (`orderId`, `customerId`, `status`, `timestamp`, `total`, `items[]`)
   - [ ] Persist to MySQL:

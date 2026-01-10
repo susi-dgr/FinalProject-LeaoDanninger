@@ -1,5 +1,6 @@
 const express = require("express");
 const mysql = require("mysql2/promise");
+const { EventHubProducerClient } = require("@azure/event-hubs"); 
 
 const PORT = parseInt(process.env.PORT || "3000", 10);
 
@@ -9,9 +10,56 @@ const {
   MYSQL_DATABASE = "oms",
   MYSQL_USER = "oms_user",
   MYSQL_PASSWORD = "oms_pass",
+
+  // Event Hub settings
+  EVENTHUB_CONNECTION_STRING,
+  EVENTHUB_NAME,
 } = process.env;
 
 let pool;
+
+// Event Hub producer (lazy init)
+let ehProducer;
+function getEventHubProducer() {
+  if (!EVENTHUB_CONNECTION_STRING || !EVENTHUB_NAME) return null;
+  if (!ehProducer) {
+    ehProducer = new EventHubProducerClient(EVENTHUB_CONNECTION_STRING, EVENTHUB_NAME);
+  }
+  return ehProducer;
+}
+
+// publish helper
+async function publishOrderCreated({ orderId, customerId, total, items }) {
+  const producer = getEventHubProducer();
+  if (!producer) {
+    // If you want hard-fail when EH isn't configured, throw instead.
+    console.warn("[api] Event Hub not configured; skipping publish.");
+    return;
+  }
+
+  const event = {
+    type: "OrderCreated",
+    version: 1,
+    occurredAt: new Date().toISOString(),
+    order: { orderId, customerId, total, items },
+  };
+
+  // Partition key keeps related events ordered (optional)
+  const partitionKey = String(customerId || orderId);
+
+  const batch = await producer.createBatch({ partitionKey });
+  const ok = batch.tryAdd({
+    body: event,
+    contentType: "application/json",
+  });
+
+  if (!ok) {
+    // very large payload; consider trimming items or sending separate item events
+    throw new Error("Event too large to add to Event Hub batch");
+  }
+
+  await producer.sendBatch(batch);
+}
 
 async function initDbPool() {
   pool = await mysql.createPool({
@@ -47,11 +95,14 @@ async function main() {
     }
   });
 
-  // Create a simulated order (simple)
+  // Create a simulated order
   app.post("/orders", requirePool, async (req, res) => {
     const orderId = req.body?.orderId || cryptoRandomId();
     const customerId = req.body?.customerId || "CUST-001";
-    const total = Number(req.body?.total ?? 49.99);
+    const total = Number(req.body?.total ?? 0);
+
+    // Optional items
+    const items = Array.isArray(req.body?.items) ? req.body.items : [];
 
     const conn = await pool.getConnection();
     try {
@@ -70,8 +121,6 @@ async function main() {
         [orderId]
       );
 
-      // Optional items
-      const items = Array.isArray(req.body?.items) ? req.body.items : [];
       for (const it of items) {
         const sku = String(it.sku || "SKU-001");
         const qty = Number(it.qty ?? 1);
@@ -84,6 +133,10 @@ async function main() {
       }
 
       await conn.commit();
+
+      // publish AFTER commit (don’t publish an order that failed DB write)
+      await publishOrderCreated({ orderId, customerId, total, items });
+
       res.status(201).json({ ok: true, orderId });
     } catch (e) {
       await conn.rollback();
@@ -106,11 +159,10 @@ async function main() {
     res.json({ ok: true, data: rows });
   });
 
-  // NOTE: Because Traefik strips "/api", the service sees routes without "/api".
-  // So we mount the API at root here, and Traefik handles the prefix externally.
   app.listen(PORT, () => {
     console.log(`[api] listening on :${PORT}`);
     console.log(`[api] mysql: ${MYSQL_USER}@${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}`);
+    console.log(`[api] eventhub: ${EVENTHUB_NAME ? EVENTHUB_NAME : "(not configured)"}`);
   });
 }
 
@@ -122,7 +174,6 @@ function clampInt(value, min, max, fallback) {
 }
 
 function cryptoRandomId() {
-  // Simple UUID-like id without external deps
   const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
   return `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
 }
