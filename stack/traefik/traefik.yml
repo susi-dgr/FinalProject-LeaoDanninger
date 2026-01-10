@@ -1,0 +1,15 @@
+entryPoints:
+  web:
+    address: ":80"
+
+providers:
+  docker:
+    exposedByDefault: false
+
+# Dashboard (dev only)
+api:
+  dashboard: true
+  insecure: true
+
+log:
+  level: INFO
