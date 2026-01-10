@@ -11,13 +11,13 @@ Note: This might change in the process
   - [x] Add initial seed/demo data
   - [ ] Add more demo data (more orders, multiple statuses, date ranges, customers, products)
 
-- [ ] Azure Cloud (Terraform): Event streaming + long-term archive path (10+ years requirement)
-  - [ ] Terraform scaffold: `versions.tf`, `providers.tf`, `main.tf`, `variables.tf`, `outputs.tf`
-  - [ ] Create Resource Group
-  - [ ] Create Event Hubs Namespace
-  - [ ] Create Event Hub `orders`
-  - [ ] Create Consumer Group `oms-consumer`
-  - [ ] Output required values (names + connection string) for use by on-prem services
+- [x] Azure Cloud (Terraform): Event streaming + long-term archive path (10+ years requirement)
+  - [x] Terraform scaffold: `versions.tf`, `providers.tf`, `main.tf`, `variables.tf`, `outputs.tf`
+  - [x] Create Resource Group
+  - [x] Create Event Hubs Namespace
+  - [x] Create Event Hub `orders`
+  - [x] Create Consumer Group `oms-consumer`
+  - [x] Output required values (names + connection string) for use by on-prem services
 
 - [ ] Azure CLI bootstrap (repeatable setup for Terraform auth)
   - [ ] `az login` and set subscription
