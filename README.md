@@ -3,18 +3,22 @@
 
 ## Order Management System Architecture
 
-### How to run (Phase 1: local Docker Compose)
+### How to run (phase 1: local Docker Compose)
 1. Move to the `stack/` directory:
 ```shell
 cd stack
 ```
+2. Copy the example environment file (or use your own credentials):
+```shell
+cp .env.example .env
+```
 
-2. Docker Compose
+3. Docker Compose
 ```shell
 docker compose build
 ```
 
-3. Start the services (with 3 web instances for load balancing):
+4. Start the services (with 3 web instances for load balancing):
 ```shell
 docker compose up -d --scale web=3
 ```
@@ -22,7 +26,7 @@ docker compose up -d --scale web=3
 - API at: `http://localhost/api/orders?limit=5`
 - Health at: `http://localhost/api/health`
 
-4. Stop the services:
+5. Stop the services:
 ```shell
 docker compose down
 ```
