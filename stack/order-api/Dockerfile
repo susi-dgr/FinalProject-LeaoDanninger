@@ -10,4 +10,4 @@ COPY src ./src
 ENV NODE_ENV=production
 EXPOSE 3000
 
-CMD ["node", "src/order-processor.js"]
+CMD ["node", "src/order-api.js"]

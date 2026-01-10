@@ -104,46 +104,10 @@ async function main() {
     // Optional items
     const items = Array.isArray(req.body?.items) ? req.body.items : [];
 
-    const conn = await pool.getConnection();
-    try {
-      await conn.beginTransaction();
+    // publish 
+    await publishOrderCreated({ orderId, customerId, total, items });
 
-      await conn.query(
-        `INSERT INTO orders (order_id, customer_id, total, current_status)
-         VALUES (?, ?, ?, 'PLACED')
-         ON DUPLICATE KEY UPDATE customer_id=VALUES(customer_id), total=VALUES(total)`,
-        [orderId, customerId, total]
-      );
-
-      await conn.query(
-        `INSERT INTO order_status_history (order_id, status)
-         VALUES (?, 'PLACED')`,
-        [orderId]
-      );
-
-      for (const it of items) {
-        const sku = String(it.sku || "SKU-001");
-        const qty = Number(it.qty ?? 1);
-        const price = Number(it.price ?? 9.99);
-        await conn.query(
-          `INSERT INTO order_items (order_id, sku, qty, price)
-           VALUES (?, ?, ?, ?)`,
-          [orderId, sku, qty, price]
-        );
-      }
-
-      await conn.commit();
-
-      // publish AFTER commit (don’t publish an order that failed DB write)
-      await publishOrderCreated({ orderId, customerId, total, items });
-
-      res.status(201).json({ ok: true, orderId });
-    } catch (e) {
-      await conn.rollback();
-      res.status(500).json({ ok: false, error: String(e.message || e) });
-    } finally {
-      conn.release();
-    }
+    res.status(201).json({ ok: true, orderId });
   });
 
   // Read recent orders

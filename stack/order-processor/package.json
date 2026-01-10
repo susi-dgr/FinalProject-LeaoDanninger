@@ -2,11 +2,15 @@
   "name": "order-processor",
   "version": "1.0.0",
   "private": true,
-  "type": "commonjs",
-  "main": "src/index.js",
+  "description": "Consumes OrderCreated events from Azure Event Hub and stores them in MySQL",
+  "main": "processor.js",
+  "scripts": {
+    "start": "node processor.js"
+  },
   "dependencies": {
-    "express": "^4.19.2",
-    "mysql2": "^3.11.0",
-    "@azure/event-hubs": "^5.11.6"
+    "@azure/event-hubs": "^5.11.5",
+    "@azure/storage-blob": "^12.17.0",
+    "@azure/eventhubs-checkpointstore-blob": "^1.0.0",
+    "mysql2": "^3.9.2"
   }
 }
