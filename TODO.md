@@ -21,10 +21,10 @@ Note: This might change in the process
 
 - [x] OMS backend integration (on-prem → Azure Event Hub → on-prem processing → MySQL)
 
-- [ ] Event generation for demo (to prove end-to-end streaming)
-  - [ ] Implement an event producer (CLI or endpoint like `/api/generate`)
-  - [ ] Publish simulated order events into Azure Event Hub
-  - [ ] Provide a short “demo script” to generate N events and show DB rows increase
+- [x] Event generation for demo (to prove end-to-end streaming)
+  - [x] Implement an event producer (API endpoint)
+  - [x] Publish simulated order events into Azure Event Hub
+  - [ ] (if there is time) Provide a short “demo script” to generate N events and show DB rows increase
 
 - [ ] Build an AI Agent using learned tools in class to query the Orders Database
 (MySql) in natural language.

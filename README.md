@@ -4,7 +4,7 @@
 ## Order Management System Architecture
 
 ### How to run 
-#### Phase 1: local Docker Compose
+#### On-Prem Setup with Docker Compose
 1. Move to the `on-prem/` directory:
 ```shell
 cd on-prem
@@ -32,7 +32,7 @@ docker compose up -d --scale web=3
 docker compose down
 ```
 
-#### Phase 2: Azure Event Hub 
+#### Azure Event Hub 
 1. Login to Azure CLI and set subscription:
 ```shell
 az login
@@ -55,4 +55,25 @@ Make sure the right location for your resources is set in `terraform.tfvars`.
 terraform init
 terraform plan
 terraform apply
+```
+
+#### Testing with Postman
+- post a new order: 
+```
+http://localhost/api/orders
+Body (JSON):
+{
+  "orderId": "ORD-1010",
+  "customerId": "CUST-123",
+  "total": 20,
+  "items": [
+    { "sku": "SKU-001", "qty": 2, "price": 10 },
+    { "sku": "SKU-ABC", "qty": 1, "price": 10 }
+  ]
+}
+```
+
+- Get all orders:
+```
+http://localhost/api/orders
 ```
