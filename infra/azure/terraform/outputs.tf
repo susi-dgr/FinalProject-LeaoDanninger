@@ -14,7 +14,11 @@ output "consumer_group_name" {
   value = azurerm_eventhub_consumer_group.cg.name
 }
 
-# This is the namespace-level connection string with send/listen rights.
+output "eventhub_connection_string" {
+  value     = azurerm_eventhub_namespace_authorization_rule.app.primary_connection_string
+  sensitive = true
+}
+
 output "eventhub_send_connection_string" {
   value     = azurerm_eventhub_namespace_authorization_rule.send.primary_connection_string
   sensitive = true

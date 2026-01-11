@@ -74,6 +74,15 @@ resource "azurerm_eventhub_consumer_group" "cg" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
+resource "azurerm_eventhub_namespace_authorization_rule" "app" {
+  name                = "oms-app"
+  namespace_name      = azurerm_eventhub_namespace.ns.name
+  resource_group_name = azurerm_resource_group.rg.name
+  listen = true
+  send   = true
+  manage = false
+}
+
 # Authorization rules for sending and receiving
 resource "azurerm_eventhub_namespace_authorization_rule" "send" {
   name                = "oms-send"

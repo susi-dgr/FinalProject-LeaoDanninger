@@ -26,7 +26,7 @@ Note: This might change in the process
   - [x] Publish simulated order events into Azure Event Hub
   - [ ] (if there is time) Provide a short “demo script” to generate N events and show DB rows increase
 
-- [ ] Build an AI Agent using learned tools in class to query the Orders Database
+- [x] Build an AI Agent using learned tools in class to query the Orders Database
 (MySql) in natural language.
 
 - [ ] Automation / orchestration (deliverable: deploy infra + deploy app once servers are up)

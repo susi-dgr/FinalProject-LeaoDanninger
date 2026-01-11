@@ -77,3 +77,16 @@ Body (JSON):
 ```
 http://localhost/api/orders
 ```
+
+### AI Agent 
+Langflow Desktop was used to create an AI agent that can query the MySQL database in natural language. To make this work, a few steps are necessary:
+1. Install Langflow
+2. Modify `requirements.txt` file found in the directory `C:\Users\USER\AppData\Roaming\com.LangflowDesktop\data` (replace `USER` with your Windows username) to include the following packages:
+```
+pymysql==1.1.1
+```
+3. Add a global variable in Langflow with the following details:
+- Name: `MY-SQL-DB`
+- Value: `mysql+pymysql://oms_user:oms_pass@localhost:3306/oms` 
+4. Setup the AI agent flow as shown below:
+![AI Agent Flow](docs/aiagentflow.png)

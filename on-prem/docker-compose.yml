@@ -100,6 +100,8 @@ services:
       - ./db/init:/docker-entrypoint-initdb.d:ro
     networks:
       - internal
+    ports:
+      - "3306:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 5s
@@ -115,3 +117,4 @@ networks:
 volumes:
   dbdata:
     name: oms_dbdata
+  
