@@ -14,13 +14,13 @@ services:
 
   web:
     image: nginx:latest
-    command: /bin/sh -c "echo \"<h1>Served by $(hostname)</h1>\" > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'"
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+    volumes:
+      - ./web/entrypoint.sh:/entrypoint.sh:ro
     networks:
       - edge
     labels:
       - traefik.enable=true
-
-      # IMPORTANT: don't catch /api here
       - traefik.http.routers.web.rule=PathPrefix(`/`) && !PathPrefix(`/api`)
       - traefik.http.routers.web.entrypoints=web
       - traefik.http.services.web.loadbalancer.server.port=80
