@@ -5,9 +5,9 @@
 
 ### How to run 
 #### Phase 1: local Docker Compose
-1. Move to the `stack/` directory:
+1. Move to the `on-prem/` directory:
 ```shell
-cd stack
+cd on-prem
 ```
 2. Copy the example environment file (or use your own credentials):
 ```shell
@@ -24,8 +24,8 @@ docker compose build
 docker compose up -d --scale web=3
 ```
 - Web UI at: `http://localhost/`
-- API at: `http://localhost/api/orders?limit=5`
 - Health at: `http://localhost/api/health`
+- Traefik dashboard at: `http://localhost:8080/dashboard/#/http/services`
 
 5. Stop the services:
 ```shell
