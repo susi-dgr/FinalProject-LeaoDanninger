@@ -78,7 +78,13 @@ Body (JSON):
 http://localhost/api/orders
 ```
 
-### AI Agent 
+#### Ansible
+To run the Ansible playbook using a Docker container, use the following command from the `on-prem/` directory:
+```shell
+docker run --rm -it -v ${PWD}:/work -w /work quay.io/ansible/ansible-runner:latest ansible-playbook -i inventory.ini ansible/playbook.yml
+```
+
+#### AI Agent 
 Langflow Desktop was used to create an AI agent that can query the MySQL database in natural language. To make this work, a few steps are necessary:
 1. Install Langflow
 2. Modify `requirements.txt` file found in the directory `C:\Users\USER\AppData\Roaming\com.LangflowDesktop\data` (replace `USER` with your Windows username) to include the following packages:

@@ -4,7 +4,7 @@ cat > /usr/share/nginx/html/index.html <<'EOF'
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Traefik LB Test</title>
+    <title>Traefik Load Balancing Test</title>
   </head>
   <body>
     <h1>Served by: __HOSTNAME__</h1>
