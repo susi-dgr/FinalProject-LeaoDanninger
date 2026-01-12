@@ -29,11 +29,6 @@ Note: This might change in the process
 - [x] Build an AI Agent using learned tools in class to query the Orders Database
 (MySql) in natural language.
 
-- [ ] Automation / orchestration (deliverable: deploy infra + deploy app once servers are up)
-  - [ ] Ansible: install Docker Engine + Docker Compose plugin on target on-prem host/VM
-  - [ ] Ansible: deploy repo (clone/copy), render `.env` from template, start stack (`docker compose up -d`)
-  - [ ] Ansible: verification tasks (containers running, `/api/health`, DB connectivity, row counts)
-
 - [ ] One-command end-to-end deployment
   - [ ] `scripts/deploy_all.sh`:
     - [ ] Run Terraform init/plan/apply (Azure Event Hub)
@@ -46,4 +41,4 @@ Note: This might change in the process
   - [ ] Describe the end-to-end flow (Client → Traefik → Nginx/API → Event Hub → NodeJS processing → MySQL)
   - [ ] Step-by-step run instructions (local + on-prem via Ansible; Azure via Terraform/Azure CLI)
   - [ ] Verification checklist (load balancing proof, Event Hub consumption, DB records, AI agent queries)
-  - [ ] “Learnings & challenges” section (routing conflicts, env/secrets handling, Event Hub auth, retries, etc.)
+  - [ ] “Learnings & challenges” section (routing conflicts, env/secrets handling, Event Hub auth, retries, etc.)  
