@@ -29,12 +29,9 @@ Note: This might change in the process
 - [x] Build an AI Agent using learned tools in class to query the Orders Database
 (MySql) in natural language.
 
-- [ ] One-command end-to-end deployment
-  - [ ] `scripts/deploy_all.sh`:
-    - [ ] Run Terraform init/plan/apply (Azure Event Hub)
-    - [ ] Export Terraform outputs into `.env` (or generate `.env` from template)
-    - [ ] Run Ansible playbook to deploy on-prem stack
-  - [ ] Document expected outputs + how to rollback/clean up
+- [x] One command to build on-prem stack via Ansible
+
+- [ ] One-command end-to-end deployment (Azure infra + on-prem stack)
 
 - [ ] Documentation (README.md + docs/)
   - [ ] Include the architecture diagram + short explanation of each component (Frontend, Event Hub, NodeJS processing, MySQL)
