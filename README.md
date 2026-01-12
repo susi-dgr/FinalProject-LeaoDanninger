@@ -184,3 +184,17 @@ pymysql==1.1.1
 - Value: `mysql+pymysql://oms_user:oms_pass@localhost:3306/oms` 
 4. Setup the AI agent flow as shown below:
 ![AI Agent Flow](docs/aiagentflow.png)
+
+## Learnings and Challenges
+
+### Traefik & Docker Compose
+Using Traefik together with Docker Compose was very straightforward. Service routing and load balancing were easy to configure, especially because of prior experience with Traefik. The label-based configuration worked well, and the load-balancing setup behaved exactly as expected. Traefik proved to be powerful while still being easy to get started with.
+
+### Terraform & Azure
+Terraform with Azure Event Hubs was easier than expected once the Azure subscription was set up correctly. Choosing the right Azure region was important, since not all services are available or enabled everywhere. After understanding how to retrieve values like `EVENTHUB_CONNECTION_STRING` using Terraform outputs and the Azure CLI, the overall workflow became clear and manageable.
+
+### Ansible
+Ansible was by far the biggest challenge in the project and the part that consumed the most time. It was much harder to understand and implement than expected, with many points where the setup could fail, especially when combined with Docker and different execution environments. Frequent failures and non-obvious error messages made debugging difficult, and the large amount of documentation and online resources was often overwhelming rather than helpful. Despite this, Ansible is clearly very powerful, and mastering it represents the greatest learning opportunity for future projects.
+
+### Langflow
+Langflow was surprisingly easy to use. Building an AI agent was simpler than anticipated. The main limitation was the lack of a built-in SQL tool, which required extending the setup by adding Python database dependencies. Once this was solved, working with Langflow was smooth and intuitive.
