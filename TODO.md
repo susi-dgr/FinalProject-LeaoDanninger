@@ -9,7 +9,7 @@ Note: This might change in the process
 - [x] On-Prem (Docker): MySQL operational database
   - [x] Create DB schema: `orders`, `order_items`, `order_status_history`
   - [x] Add initial seed/demo data
-  - [ ] Add more demo data (more orders, multiple statuses, date ranges, customers, products)
+  - [ ] Add more demo data 
 
 - [x] Azure Cloud (Terraform): Event streaming + long-term archive path (10+ years requirement)
   - [x] Terraform scaffold: `versions.tf`, `providers.tf`, `main.tf`, `variables.tf`, `outputs.tf`
@@ -24,7 +24,6 @@ Note: This might change in the process
 - [x] Event generation for demo (to prove end-to-end streaming)
   - [x] Implement an event producer (API endpoint)
   - [x] Publish simulated order events into Azure Event Hub
-  - [ ] (if there is time) Provide a short “demo script” to generate N events and show DB rows increase
 
 - [x] Build an AI Agent using learned tools in class to query the Orders Database
 (MySql) in natural language.
@@ -36,6 +35,6 @@ Note: This might change in the process
 - [ ] Documentation (README.md + docs/)
   - [ ] Include the architecture diagram + short explanation of each component (Frontend, Event Hub, NodeJS processing, MySQL)
   - [ ] Describe the end-to-end flow (Client → Traefik → Nginx/API → Event Hub → NodeJS processing → MySQL)
-  - [ ] Step-by-step run instructions (local + on-prem via Ansible; Azure via Terraform/Azure CLI)
-  - [ ] Verification checklist (load balancing proof, Event Hub consumption, DB records, AI agent queries)
+  - [ ] Describe the setup
+  - [x] Step-by-step run instructions (local + on-prem via Ansible; Azure via Terraform/Azure CLI)
   - [ ] “Learnings & challenges” section (routing conflicts, env/secrets handling, Event Hub auth, retries, etc.)  
