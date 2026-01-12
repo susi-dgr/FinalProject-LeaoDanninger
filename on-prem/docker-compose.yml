@@ -24,43 +24,6 @@ services:
       - traefik.http.services.web.loadbalancer.server.port=80
       - traefik.http.routers.web.priority=1
 
-
-  api:
-    build:
-      context: ./order-api
-    environment:
-      - PORT=${API_PORT:-3000}
-
-      # DB (read-only in ideal world, but OK for now)
-      - MYSQL_HOST=db
-      - MYSQL_PORT=3306
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-
-      # Event Hub producer (SEND)
-      - EVENTHUB_CONNECTION_STRING=${EVENTHUB_SEND_CONNECTION_STRING}
-      - EVENTHUB_NAME=${EVENTHUB_NAME:-orders}
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - edge
-      - internal
-    labels:
-      - traefik.enable=true
-
-      # Route "/api" -> NodeJS
-      - traefik.http.routers.api.rule=PathPrefix(`/api`)
-      - traefik.http.routers.api.entrypoints=web
-      - traefik.http.routers.api.priority=10
-
-      # Strip "/api" prefix before forwarding to the service
-      - traefik.http.middlewares.api-strip.stripprefix.prefixes=/api
-      - traefik.http.routers.api.middlewares=api-strip
-
-      - traefik.http.services.api.loadbalancer.server.port=${API_PORT:-3000}
-
   order-processor:
     build:
       context: ./order-processor
@@ -88,7 +51,8 @@ services:
     restart: unless-stopped
 
   db:
-    image: mysql:latest
+    build:
+      context: ./db
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -96,7 +60,6 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - dbdata:/var/lib/mysql
-      - ./db/init:/docker-entrypoint-initdb.d:ro
     networks:
       - internal
     ports:
