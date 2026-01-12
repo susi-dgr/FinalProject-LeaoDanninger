@@ -1,0 +1,84 @@
+---
+- name: Render artifacts and run docker compose
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    onprem_root: "{{ playbook_dir }}/.."
+    repo_root: "{{ playbook_dir }}/../.."
+
+    compose_file: "{{ onprem_root }}/docker-compose.yml"
+    env_file: "{{ repo_root }}/.env"
+
+    web_dir: "{{ onprem_root }}/web"
+    entrypoint_path: "{{ web_dir }}/entrypoint.sh"
+
+    web_replicas: 3
+
+  tasks:
+    - name: Ensure web directory exists
+      ansible.builtin.file:
+        path: "{{ web_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Write entrypoint that generates index.html with container hostname
+      ansible.builtin.copy:
+        dest: "{{ entrypoint_path }}"
+        mode: "0755"
+        content: |
+          #!/bin/sh
+          set -eu
+
+          cat > /usr/share/nginx/html/index.html <<'EOF'
+          <html>
+            <head>
+              <meta charset="utf-8" />
+              <title>Traefik Load Balancing Test</title>
+            </head>
+            <body>
+              <h1>Served by: __HOSTNAME__</h1>
+              <p>Refresh the page to see load balancing across containers.</p>
+            </body>
+          </html>
+          EOF
+
+          sed -i "s/__HOSTNAME__/$(hostname)/g" /usr/share/nginx/html/index.html
+          exec nginx -g 'daemon off;'
+
+    - name: Assert docker-compose.yml exists
+      ansible.builtin.stat:
+        path: "{{ compose_file }}"
+      register: compose_stat
+
+    - name: Fail if docker-compose.yml is missing
+      ansible.builtin.fail:
+        msg: "docker-compose.yml not found at {{ compose_file }}"
+      when: not compose_stat.stat.exists
+
+    - name: Assert .env exists
+      ansible.builtin.stat:
+        path: "{{ env_file }}"
+      register: env_stat
+
+    - name: Fail if .env is missing
+      ansible.builtin.fail:
+        msg: ".env not found at {{ env_file }}"
+      when: not env_stat.stat.exists
+
+    - name: Validate docker compose config
+      ansible.builtin.command:
+        cmd: docker compose --env-file "{{ env_file }}" -f "{{ compose_file }}" config
+      changed_when: false
+
+    - name: Build and start stack with scaled web replicas
+      ansible.builtin.command:
+        cmd: docker compose --env-file "{{ env_file }}" -f "{{ compose_file }}" up -d --build --remove-orphans --scale web={{ web_replicas }}
+      register: up_result
+      changed_when: "'Recreated' in up_result.stdout or 'Created' in up_result.stdout or 'Building' in up_result.stdout or 'Started' in up_result.stdout"
+
+    - name: Show running containers
+      ansible.builtin.command:
+        cmd: docker compose -f "{{ compose_file }}" ps
+      changed_when: false

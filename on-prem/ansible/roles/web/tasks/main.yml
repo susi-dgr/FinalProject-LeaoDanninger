@@ -1,0 +1,32 @@
+---
+- name: Ensure web directory exists
+  ansible.builtin.file:
+    path: "{{ web_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Render nginx entrypoint script
+  ansible.builtin.template:
+    src: entrypoint.sh.j2
+    dest: "{{ web_dir }}/entrypoint.sh"
+    mode: "0755"
+
+- name: Assert docker-compose file exists
+  ansible.builtin.stat:
+    path: "{{ compose_file }}"
+  register: compose_stat
+
+- name: Fail if docker-compose.yml is missing
+  ansible.builtin.fail:
+    msg: "docker-compose.yml not found at {{ compose_file }}"
+  when: not compose_stat.stat.exists
+
+- name: Assert .env file exists
+  ansible.builtin.stat:
+    path: "{{ env_file }}"
+  register: env_stat
+
+- name: Fail if .env is missing
+  ansible.builtin.fail:
+    msg: ".env not found at {{ env_file }}. Create it from .env.example."
+  when: not env_stat.stat.exists
