@@ -1,22 +1,20 @@
 services:
   traefik:
-    image: traefik:latest
+    build:
+      context: ./traefik
     command:
       - --configFile=/etc/traefik/traefik.yml
     ports:
       - "${TRAEFIK_HTTP_PORT:-80}:80"
-      - "8080:8080" # dashboard (dev only)
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
     networks:
       - edge
 
   web:
-    image: nginx:latest
-    entrypoint: ["/bin/sh", "/entrypoint.sh"]
-    volumes:
-      - ./web/entrypoint.sh:/entrypoint.sh:ro
+    build:
+      context: ./web
     networks:
       - edge
     labels:
@@ -25,6 +23,7 @@ services:
       - traefik.http.routers.web.entrypoints=web
       - traefik.http.services.web.loadbalancer.server.port=80
       - traefik.http.routers.web.priority=1
+
 
   api:
     build:

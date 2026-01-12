@@ -57,6 +57,32 @@ terraform plan
 terraform apply
 ```
 
+#### Ansible
+1. Build the Ansible runner image:
+```shell
+docker build --no-cache -f on-prem/ansible/Dockerfile.ansible -t ansible-runner:local on-prem/ansible
+```
+
+2. Create .env and set the required variables:
+```shell
+copy .env.example .env
+```
+
+3. Run Ansible to build and start the stack:
+```shell
+docker run --rm -it `
+  -v ${PWD}:/work `
+  -w /work/on-prem/ansible `
+  -v //var/run/docker.sock:/var/run/docker.sock `
+  ansible-runner:local `
+  ansible-playbook -i inventory.ini site.yml
+```
+
+4. Verify the setup:
+- Web UI at: `http://localhost/`
+- Health at: `http://localhost/api/health`
+- Traefik dashboard at: `http://localhost:8080/dashboard/#/http/services`
+
 #### Testing with Postman
 - post a new order: 
 ```
@@ -76,12 +102,6 @@ Body (JSON):
 - Get all orders:
 ```
 http://localhost/api/orders
-```
-
-#### Ansible
-To run the Ansible playbook using a Docker container, use the following command from the `on-prem/` directory:
-```shell
-docker run --rm -it -v ${PWD}:/work -w /work quay.io/ansible/ansible-runner:latest ansible-playbook -i inventory.ini ansible/playbook.yml
 ```
 
 #### AI Agent 
