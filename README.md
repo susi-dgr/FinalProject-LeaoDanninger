@@ -1,5 +1,11 @@
 # Online Shopping Order Processing System 
 **Contributors:** Luiz Leão Junior and Susanne Danninger 
+**Course:** Administração de Redes e Infraestruturas de IT
+
+## Project Purpose 
+The purpose of this project is to build the **infrastructure** for an online shopping order processing system, not the full application logic. It demonstrates a hybrid setup with an on-premise environment using Docker, Traefik, Nginx, NodeJS, and MySQL, combined with cloud services using Azure Event Hub for event streaming and long-term storage.
+
+The infrastructure is managed using **Terraform** for Azure resources and **Ansible** for local automation. An **AI agent** is also included to show how it can interact with the database. The focus of the project is on infrastructure topics such as load balancing, event-driven architecture, automation, and storage, rather than application features.
 
 ## Order Management System Architecture
 ![Architecture](docs/OMS-Overview.png)
