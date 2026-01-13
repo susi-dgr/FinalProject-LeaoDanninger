@@ -1,5 +1,5 @@
 # Online Shopping Order Processing System 
-**Contributors:** Luiz Leão Junior and Susanne Danninger 
+**Contributors:** Luiz Leão Junior and Susanne Danninger  \
 **Course:** Administração de Redes e Infraestruturas de IT
 
 ## Project Purpose 
