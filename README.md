@@ -32,7 +32,8 @@ The infrastructure is managed using **Terraform** for Azure resources and **Ansi
 - **AI Agent**: Developed using Langflow, enabling natural language queries to the Orders Database.
 
 ## How to run the project (Ansible + Terraform)
-### Ansible
+> Some configurations/commands are Windows-specific. Adjust accordingly for Linux/MacOS.
+### On-Prem Setup with Ansible
 1. Build the Ansible runner image:
 ```shell
 docker build --no-cache -f on-prem/ansible/Dockerfile.ansible -t ansible-runner:local on-prem/ansible
@@ -62,11 +63,6 @@ docker run --rm -it `
   ansible-runner:local `
   ansible-playbook -i inventory.ini site.yml
 ```
-
-4. Verify the setup:
-- Web UI at: `http://localhost/`
-- Health at: `http://localhost/api/health`
-- Traefik dashboard at: `http://localhost:8080/dashboard/#/http/services`
 
 ### Azure Event Hub with Terraform
 1. Login to Azure CLI and set subscription:
@@ -129,10 +125,10 @@ docker compose up -d --scale web=3
 docker compose down
 ```
 
-### Verify it is working
+## Verify it is working
 - Web UI at: `http://localhost/`
 - Health at: `http://localhost/api/health`
-- Traefik dashboard at: `http://localhost:8080/dashboard/#/http/services`
+- Traefik dashboard at: `http://localhost:8080/dashboard`
 - Sample Order Created event JSON to send to Event Hub: (this can be tested using the Data Explorer in the Event Hub Instance)
 ```shell
 {
@@ -153,43 +149,25 @@ docker compose down
 - Check the Azure Storage Container to see if the event was archived.
 - After this you can for example use the AI Agent to query the database.
 
-### Azure Event Hub 
-1. Login to Azure CLI and set subscription:
-```shell
-az login
-```
-
-Show your subscription ID:
-```shell
-az account list -o table
-```
-
-Set your subscription (replace `<SUBSCRIPTION_ID>` with your own):
-```shell
-az account set --subscription <SUBSCRIPTION_ID>
-```
-
-Make sure the right location for your resources is set in `terraform.tfvars`.
-
-2. Terraform commands to create the Event Hub infrastructure:
-```shell
-terraform init
-terraform plan
-terraform apply
-```
-
 ## How to run the AI Agent 
 Langflow Desktop was used to create an AI agent that can query the MySQL database in natural language. To make this work, a few steps are necessary:
+
 1. Install Langflow
+
 2. Modify `requirements.txt` file found in the directory `C:\Users\USER\AppData\Roaming\com.LangflowDesktop\data` (replace `USER` with your Windows username) to include the following packages:
 ```
 pymysql==1.1.1
 ```
+
 3. Add a global variable in Langflow with the following details:
 - Name: `MY-SQL-DB`
-- Value: `mysql+pymysql://oms_user:oms_pass@localhost:3306/oms` 
+- Value: `mysql+pymysql://oms_user:oms_pass@localhost:3306/oms`
+
 4. Setup the AI agent flow as shown below:
 ![AI Agent Flow](docs/aiagentflow.png)
+
+5. In the playground you can then query the database in natural language:
+![AI Agent Example](docs/aiagentexample.png)
 
 ## Learnings and Challenges
 
