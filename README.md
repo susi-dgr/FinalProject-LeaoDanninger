@@ -1,5 +1,6 @@
 # Online Shopping Order Processing System 
 **Contributors:** Luiz Leão Junior and Susanne Danninger  \
+**Link to Repository:** <a href="https://github.com/susi-dgr/FinalProject-LeaoDanninger">https://github.com/susi-dgr/FinalProject-LeaoDanninger</a> \
 **Course:** Administração de Redes e Infraestruturas de IT
 
 ## Project Purpose 
