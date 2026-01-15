@@ -28,10 +28,11 @@ The infrastructure is managed using **Terraform** for Azure resources and **Ansi
 5. The AI Agent can query the MySQL database in natural language to retrieve order information.
 
 ### How was the project built
-- **On-Prem Infrastructure**: Built using Docker Compose for container orchestration and Ansible for automation. Resulting in a scalable and manageable on-premises setup, that can be deployed with a single command.
+- **On-Prem Infrastructure**: Built using Docker Compose for container orchestration and Ansible for automation, as well as for modification of the index.html at creation of the nginx container (in order to show the hostname and to show Load Balancing works as intended) Resulting in a scalable and manageable on-premises setup, that can be deployed with a single command.
 - **Azure Cloud Infrastructure**: Provisioned using Terraform, allowing for infrastructure as code and easy management of cloud resources.
 - **AI Agent**: Developed using Langflow, enabling natural language queries to the Orders Database.
 
+Terraform was used as an 
 ## How to run the project (Ansible + Terraform)
 > Some configurations/commands are Windows-specific. Adjust accordingly for Linux/MacOS.
 ### On-Prem Setup with Ansible
