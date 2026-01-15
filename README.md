@@ -156,6 +156,10 @@ Langflow Desktop was used to create an AI agent that can query the MySQL databas
 
 1. Install Langflow
 
+2. Add an MCP Server by following the instructions at: https://github.com/designcomputer/mysql_mcp_server or other similar tools that can expose a MySQL database to Langflow.
+- Clone the repository
+- Copy the json from that github page into the MCP server configuration file in Langflow.
+
 2. Modify `requirements.txt` file found in the directory `C:\Users\USER\AppData\Roaming\com.LangflowDesktop\data` (replace `USER` with your Windows username) to include the following packages:
 ```
 pymysql==1.1.1
